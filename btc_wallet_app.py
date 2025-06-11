@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import requests
 from fpdf import FPDF
+import os
+from datetime import datetime
 
 # Analyze BTC address
 def analyze_btc_address(address):
@@ -26,6 +28,19 @@ def analyze_btc_address(address):
             return None
     except Exception:
         return None
+
+# Save analysis log
+def save_wallet_log(data):
+    log_file = "wallet_logs.csv"
+    log_data = {
+        "Date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        **data
+    }
+    df = pd.DataFrame([log_data])
+    if os.path.exists(log_file):
+        df.to_csv(log_file, mode='a', header=False, index=False)
+    else:
+        df.to_csv(log_file, index=False)
 
 # Display wallet data
 def display_wallet_report(data):
@@ -126,12 +141,33 @@ st.markdown("""
 st.title("🕵️ Bitcoin Wallet Analyzer")
 st.caption("Track and analyze BTC wallet behavior visually.")
 
+# Admin access
+if "show_admin" not in st.session_state:
+    st.session_state.show_admin = False
+
+if st.text_input("🔐 Enter Admin Password:", type="password") == "ADMIN":
+    st.session_state.show_admin = True
+
+# Show Admin Dashboard
+if st.session_state.show_admin:
+    st.markdown("---")
+    st.subheader("🛠️ Admin Dashboard")
+    try:
+        logs = pd.read_csv("wallet_logs.csv")
+        st.dataframe(logs, use_container_width=True)
+        st.bar_chart(logs['Final Balance (BTC)'])
+    except Exception:
+        st.warning("No logs available yet.")
+    st.stop()
+
+# User Input
 address = st.text_input("🔗 Enter BTC address:", value="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa")
 
 if st.button("🔍 Analyze Wallet"):
     with st.spinner("Fetching wallet data..."):
         wallet = analyze_btc_address(address)
         if wallet:
+            save_wallet_log(wallet)
             st.markdown("---")
             st.subheader("📋 Wallet Report")
             display_wallet_report(wallet)
@@ -153,16 +189,16 @@ if st.button("🔍 Analyze Wallet"):
                 for alert in alerts:
                     st.info(alert)
 
-            with st.expander("📂 View Extended Report"):
+            with st.expander("🔓 View Full Report"):
                 st.markdown("""
                     <div style='padding: 1em; background-color: #1c1c1c; border-radius: 8px;'>
                     <ul>
-                        <li>🔸 פירוט ניתוח לפי שעות פעילות</li>
-                        <li>🔸 חלוקת סכומים לפי גובה</li>
-                        <li>🔸 זיהוי התנהגות חוזרת</li>
-                        <li>🧭 אינדקס מוסרי – סטייה מהתנהגות אחראית או נורמטיבית</li>
+                        <li>🔸 Hourly activity patterns</li>
+                        <li>🔸 Value distribution breakdown</li>
+                        <li>🔸 Behavioral fingerprints</li>
+                        <li>🧭 Moral Index – deviation from responsible norms</li>
                     </ul>
-                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 לחץ כאן להזמנת הדוח המלא והמורחב</a>
+                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 Order the full extended report here</a>
                     </div>
                 """, unsafe_allow_html=True)
 
