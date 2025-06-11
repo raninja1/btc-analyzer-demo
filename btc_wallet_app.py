@@ -153,6 +153,20 @@ if st.button("🔍 Analyze Wallet"):
                 for alert in alerts:
                     st.info(alert)
 
+                st.markdown("---")
+                st.markdown("**🔍 לחצן לחשיפת ניתוחים נוספים:**")
+                with st.container():
+                    st.markdown("""
+                        <div style='padding: 1em; background-color: #1c1c1c; border-radius: 8px;'>
+                        <ul>
+                            <li>🔸 פירוט ניתוח לפי שעות פעילות</li>
+                            <li>🔸 חלוקת סכומים לפי גובה</li>
+                            <li>🔸 זיהוי התנהגות חוזרת</li>
+                        </ul>
+                        <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 לחץ כאן להזמנת הדוח המלא והמורחב</a>
+                        </div>
+                    """, unsafe_allow_html=True)
+
             st.markdown("---")
             st.subheader("📄 Export PDF")
             filename = export_wallet_pdf_clean(wallet)
