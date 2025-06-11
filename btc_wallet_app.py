@@ -141,12 +141,16 @@ st.markdown("""
 st.title("🕵️ Bitcoin Wallet Analyzer")
 st.caption("Track and analyze BTC wallet behavior visually.")
 
-# Admin access
+# Admin access modal style
+with st.sidebar:
+    with st.expander("👤 Login"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if username == "ADMIN" and password == "ADMIN":
+            st.session_state.show_admin = True
+
 if "show_admin" not in st.session_state:
     st.session_state.show_admin = False
-
-if st.text_input("🔐 Enter Admin Password:", type="password") == "ADMIN":
-    st.session_state.show_admin = True
 
 # Show Admin Dashboard
 if st.session_state.show_admin:
@@ -198,7 +202,7 @@ if st.button("🔍 Analyze Wallet"):
                         <li>🔸 Behavioral fingerprints</li>
                         <li>🧭 Moral Index – deviation from responsible norms</li>
                     </ul>
-                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 Order the full extended report here</a>
+                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 View extended report here</a>
                     </div>
                 """, unsafe_allow_html=True)
 
