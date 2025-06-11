@@ -36,7 +36,7 @@ def display_wallet_report(data):
 def plot_wallet_pie(data):
     labels = ['Final Balance', 'Total Sent']
     values = [data['Final Balance (BTC)'], data['Total Sent (BTC)']]
-    fig, ax = plt.subplots(figsize=(2.5, 2.5))
+    fig, ax = plt.subplots(figsize=(3, 3))
     ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90)
     st.pyplot(fig)
 
@@ -96,7 +96,7 @@ def export_wallet_pdf_clean(data, filename="btc_wallet_report.pdf"):
     return filename
 
 # --- UI Design ---
-st.set_page_config(page_title="BTC Wallet Analyzer", layout="wide", page_icon="💼")
+st.set_page_config(page_title="BTC Wallet Analyzer", layout="centered", page_icon="💼")
 st.markdown("""
     <style>
     .block-container {
@@ -112,6 +112,13 @@ st.markdown("""
         padding: 10px 20px;
         border-radius: 8px;
         border: none;
+        transition: 0.3s ease;
+    }
+    .stButton > button:hover {
+        background-color: #145a86;
+    }
+    .stDataFrame, .stAlert, .element-container {
+        margin-top: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -125,25 +132,28 @@ if st.button("🔍 Analyze Wallet"):
     with st.spinner("Fetching wallet data..."):
         wallet = analyze_btc_address(address)
         if wallet:
+            st.markdown("---")
+            st.subheader("📋 Wallet Report")
+            display_wallet_report(wallet)
+
+            st.markdown("---")
             col1, col2 = st.columns(2)
 
             with col1:
-                st.subheader("📋 Wallet Report")
-                display_wallet_report(wallet)
+                st.subheader("📊 Wallet Distribution")
+                plot_wallet_pie(wallet)
 
+            with col2:
                 st.subheader("⚠️ Risk Score")
                 score = calculate_risk_score(wallet)
                 plot_risk_meter(score)
-
-            with col2:
-                st.subheader("📊 Wallet Distribution")
-                plot_wallet_pie(wallet)
 
             with st.expander("🚨 Suspicious Activity Alerts", expanded=True):
                 alerts = detect_suspicious_activity(wallet)
                 for alert in alerts:
                     st.info(alert)
 
+            st.markdown("---")
             st.subheader("📄 Export PDF")
             filename = export_wallet_pdf_clean(wallet)
             with open(filename, "rb") as file:
