@@ -162,6 +162,7 @@ if st.button("🔍 Analyze Wallet"):
                             <li>🔸 פירוט ניתוח לפי שעות פעילות</li>
                             <li>🔸 חלוקת סכומים לפי גובה</li>
                             <li>🔸 זיהוי התנהגות חוזרת</li>
+                            <li>🧭 אינדקס מוסרי – סטייה מהתנהגות אחראית או נורמטיבית</li>
                         </ul>
                         <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 לחץ כאן להזמנת הדוח המלא והמורחב</a>
                         </div>
