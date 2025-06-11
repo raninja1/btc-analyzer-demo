@@ -202,7 +202,7 @@ if st.button("🔍 Analyze Wallet"):
                         <li>🔸 Behavioral fingerprints</li>
                         <li>🧭 Moral Index – deviation from responsible norms</li>
                     </ul>
-                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 View extended report here</a>
+                    <a href="https://yourdomain.com/premium-report" target="_blank" style='color: #00c0ff;'>🔐 Get full premium report here</a>
                     </div>
                 """, unsafe_allow_html=True)
 
